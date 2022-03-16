@@ -1,0 +1,26 @@
+name: nebula_vlm 
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - json5
+  - jupyter_client
+  - jupyter_core
+  - jupyter_server
+  - jupyterlab
+  - jupyterlab_pygments
+  - jupyterlab_server
+  - jupyterlab_widgets
+  - notebook
+  - pip:
+    - gitpython==3.1.26
+    - ipykernel==6.6.0
+    - ipython==7.30.1
+    - numpy
+    - pymilvus==1.1.1
+    - python-arango==7.2.0
+    - flask==2.0.2
+    - gevent==21.12.0
+    - gunicorn==20.1.0
+    - opencv-python
+    - git+https://github.com/openai/CLIP.git

@@ -1,0 +1,4 @@
+boto3==1.20.24
+elasticsearch==8.1.0
+elasticsearch_dsl==7.4.0
+numpy==1.21.2

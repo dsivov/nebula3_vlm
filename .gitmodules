@@ -1,0 +1,3 @@
+[submodule "nebula3_database"]
+	path = nebula3_database
+	url = https://github.com/dsivov/nebula3_database.git
