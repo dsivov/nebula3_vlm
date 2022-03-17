@@ -6,19 +6,18 @@ import numpy as np
 
 from pathlib import Path
 from PIL import Image
-from nebula_api.nebula_enrichment_api import NRE_API
-from experts.common.RemoteAPIUtility import RemoteAPIUtility
+from nebula3_database.movie_db import MOVIE_DB
 
 class CLIP_API:
     def __init__(self, vlm_name):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         print(clip.available_models())
         if vlm_name == 'rn':
-            self.model, self.preprocess = clip.load("RN50x64", self.device) 
+            self.model, self.preprocess = clip.load("RN50x64", self.device, download_root="/opt/models/clip") 
         if vlm_name == 'vit':
-            self.model, self.preprocess = clip.load("ViT-L/14", self.device)
+            self.model, self.preprocess = clip.load("ViT-L/14", self.device, download_root="/opt/models/clip")
         #if vlm_name == 'vid':
-        self.nre = NRE_API()
+        self.nre = MOVIE_DB()
         self.db = self.nre.db
     
     def _calculate_images_features(self, frame):
@@ -34,7 +33,7 @@ class CLIP_API:
 
     def clip_encode_frame(self, fn, movie_id, scene_element):
         if (fn):
-            remote_api = RemoteAPIUtility()
+            remote_api = self.nre
             metadata = remote_api.get_movie_info(movie_id)
             mdfs = metadata['mdfs'][scene_element]
             video_file = Path(fn)
@@ -53,7 +52,7 @@ class CLIP_API:
 
     def clip_encode_video(self, fn, movie_id, scene_element):        
         if (fn):
-            remote_api = RemoteAPIUtility()
+            remote_api = self.nre
             metadata = remote_api.get_movie_info(movie_id)
             mdfs = metadata['mdfs'][scene_element]
             video_file = Path(fn)
@@ -83,7 +82,7 @@ class CLIP_API:
             print("File doesn't exist: ", fn)
     
     def clip_encode_text(self, text):
-        text_input = clip.tokenize([text]).cuda()
+        text_input = clip.tokenize([text]).to(self.device)
         with torch.no_grad():
             text_features = self.model.encode_text(text_input)
             text_features /= text_features.norm(dim=-1, keepdim=True)
@@ -91,7 +90,7 @@ class CLIP_API:
         return(text_features)
     
     def clip_batch_encode_text(self, texts):
-        text_input = clip.tokenize(texts).cuda()
+        text_input = clip.tokenize(texts).to(self.device)
         batch_features = []
         with torch.no_grad():
             text_features = self.model.encode_text(text_input)
@@ -101,8 +100,8 @@ class CLIP_API:
         return(batch_features)
 
 def main():
-    clip=CLIP_API('rn')
+    clip=CLIP_API('vit')
     #clip.clip_encode_video('/home/dimas/0028_The_Crying_Game_00_53_53_876-00_53_55_522.mp4','Movies/114207205',0)
-    clip.clip_batch_encode_text([])
+    clip.clip_batch_encode_text(["test"])
 if __name__ == "__main__":
     main()
