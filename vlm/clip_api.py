@@ -13,9 +13,9 @@ class CLIP_API:
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         print(clip.available_models())
         if vlm_name == 'rn':
-            self.model, self.preprocess = clip.load("RN50x64", self.device, download_root="/opt/models/clip") 
+            self.model, self.preprocess = clip.load("RN50x64", self.device, download_root="/opt/models/clip_ms") 
         if vlm_name == 'vit':
-            self.model, self.preprocess = clip.load("ViT-L/14", self.device, download_root="/opt/models/clip")
+            self.model, self.preprocess = clip.load("ViT-L/14", self.device, download_root="/opt/models/clip_ms")
         #if vlm_name == 'vid':
         self.nre = MOVIE_DB()
         self.db = self.nre.db
