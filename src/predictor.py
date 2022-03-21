@@ -62,7 +62,7 @@ class ScoringService(object):
                 f'{model}',
                 f'/opt/models/{model}/{model}.py'
             )
-
+            print("Loading Model")    
             cls.models[model] = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(cls.models[model])
 
@@ -72,6 +72,16 @@ class ScoringService(object):
     def predict(cls, model, input):
         clf = cls.get_model(model)
         return clf.Model.predict(input)
+    
+    @classmethod
+    def encode_text(cls, model, input):
+        clf = cls.get_model(model)
+        return clf.Model.encode_text(input)
+    
+    @classmethod
+    def encode_video(cls, model, input):
+        clf = cls.get_model(model)
+        return clf.Model.encode_video(input)
 
     @classmethod
     def metadata(cls, model):
@@ -132,6 +142,55 @@ def predict(model):
     # Do the prediction
     return ScoringService.predict(model, parsed_data), 200
 
+@app.route(
+    '/v1/models/<model>:encode_text',
+    methods=['POST']
+)
+@not_found_on_error
+def encode_text(model):
+    body = flask.request.json
+
+    model_spec = ScoringService.metadata(model)
+    schema = model_spec['inputs']
+    assert ('instances' in body)
+    parsed_data = {}
+    data = body['instances']
+    record_count = len(data)
+
+    extraneous_fields = set(data.keys()) - set(schema.keys())
+    assert not extraneous_fields, (
+        f'received extraneous fields {extraneous_fields}')
+
+    for field, info in schema.items():
+        parsed_data[field] = np.asarray(data[field], dtype=info['dtype'])
+
+    # Do the prediction
+    return ScoringService.encode_text(model, parsed_data), 200
+
+@app.route(
+    '/v1/models/<model>:encode_video',
+    methods=['POST']
+)
+@not_found_on_error
+def encode_video(model):
+    body = flask.request.json
+
+    model_spec = ScoringService.metadata(model)
+    schema = model_spec['inputs']
+    assert ('instances' in body)
+    parsed_data = {}
+    data = body['instances']
+    record_count = len(data)
+
+    extraneous_fields = set(data.keys()) - set(schema.keys())
+    assert not extraneous_fields, (
+        f'received extraneous fields {extraneous_fields}')
+
+    for field, info in schema.items():
+        parsed_data[field] = np.asarray(data[field], dtype=info['dtype'])
+
+    # Do the prediction
+    return ScoringService.encode_video(model, parsed_data), 200
 
 @app.route('/healthcheck', methods=['GET'])
 def healthcheck():
