@@ -1,6 +1,7 @@
 
 from pyexpat import model
 import sys
+sys.path.insert(0, "/opt/program")
 sys.path.insert(0, "/notebooks/nebula3_database")
 sys.path.insert(0, "/notebooks")
 from vlm.clip_api import CLIP_API
