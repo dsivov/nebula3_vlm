@@ -6,5 +6,6 @@ export PYTHONPATH=/notebooks/:/notebooks/nebula3_database
 cd /notebooks && git clone https://github.com/dsivov/nebula3_vlm.git .   
 cd /notebooks && git submodule init && git submodule update
 cd /notebooks/nebula3_database && git checkout main  
+cd /notebooks
 chmod -R a+w /notebooks
 jupyter lab --ip=0.0.0.0 --no-browser --allow-root --LabApp.trust_xheaders=True --LabApp.disable_check_xsrf=False --LabApp.allow_remote_access=True --LabApp.allow_origin='*'
