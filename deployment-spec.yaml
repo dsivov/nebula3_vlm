@@ -2,7 +2,11 @@ image: dsivov/nebula3_vlm_microservice:latest
 port: 8501
 resources:
   replicas: 1
-  instanceType: C4
+  instanceType: C5
 env:
   - name: PYTHONPATH 
     value: /opt/models:/opt/program
+  - name: MODEL_SERVER_TIMEOUT
+    value: "600"
+  - name: MODEL_SERVER_WORKERS 
+    value: "2"

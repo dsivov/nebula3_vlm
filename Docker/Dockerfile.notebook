@@ -47,9 +47,9 @@ ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
 
 # Set up the program in the image
-COPY src /opt/program
-COPY nebula3_database /opt/program
-COPY vlm /opt/program
+COPY app /opt/program
+COPY nebula3_database /opt/program/nebula3_database
+COPY vlm /opt/program/vlm
 RUN chmod +x /opt/program/serve
 WORKDIR /notebooks
 CMD ["/run.sh"]

@@ -35,7 +35,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV PATH /opt/conda/bin:$PATH
 ENV PATH /opt/conda/envs/nebula_vlm/bin:$PATH
 COPY run.sh /run.sh
-#RUN mkdir -p /opt/models
+RUN mkdir -p /opt/models
 
 # Set some environment variables. PYTHONUNBUFFERED keeps Python from buffering
 #  our standard output stream, which means that logs can be delivered to the
@@ -47,11 +47,9 @@ ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
 
 # Set up the program in the image
-COPY models /opt/models
-COPY app /opt/program
-COPY nebula3_database /opt/program/nebula3_database
-COPY vlm /opt/program/vlm
+COPY src /opt/program
+COPY nebula3_database /opt/program
+COPY vlm /opt/program
 RUN chmod +x /opt/program/serve
-WORKDIR /opt/program
-ENTRYPOINT ["serve"]
-#CMD ["/run.sh"]
+WORKDIR /notebooks
+CMD ["/run.sh"]

@@ -6,8 +6,13 @@ Structure:
 2. lvm/clip_api.py - clip API
 3. notebooks/ - notebooks for test/debug/play
 4. models/ - code for vlm model microservice
-5. src/ - infrustructure for microservice
+5. app/ - infrustructure for microservice
 6. config.py - database connection settings
 7. Dockerfile - docker image definition
 8. run.sh - image entry point
 9. environment.yaml - python dependencies
+
+Gradient deployment:  
+Image: dsivov/nebula3_vlm_microservice:latest  
+Gradient deployment command and file:  
+gradient deployments create --name vlm_clip_ms --projectId <project_id> --spec ./deployment-spec.yaml
