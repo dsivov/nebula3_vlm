@@ -1,4 +1,4 @@
-name: nebula_vlm 
+name: nebula_vlm
 channels:
   - conda-forge
   - defaults
@@ -26,3 +26,4 @@ dependencies:
     - gevent
     - gunicorn
     - git+https://github.com/openai/CLIP.git
+prefix: /opt/conda
