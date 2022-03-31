@@ -1,0 +1,39 @@
+{
+	"name": "Nebula Dev",
+	"context": ".",
+	"dockerFile": "./Dockerfile",
+	// "image": "aharonamir/dev-python-nebula2:conda-0.3",
+	"settings": {
+		"python.defaultInterpreterPath": "/opt/conda/bin/python",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+		"python.formatting.autopep8Path": "/opt/conda/bin/autopep8",
+		"python.formatting.yapfPath": "/opt/conda/bin/yapf",
+		"python.linting.flake8Path": "/opt/conda/bin/flake8",
+		"python.linting.pycodestylePath": "/opt/conda/bin/pycodestyle",
+		"python.linting.pydocstylePath": "/opt/conda/bin/pydocstyle",
+		"python.linting.pylintPath": "/opt/conda/bin/pylint"
+	},
+	// vs-code extensions to enable inside the dev container
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"ms-toolsai.jupyter-renderers",
+		"ms-toolsai.jupyter",
+		"ms-toolsai.jupyter-keymap",
+		"donjayamanne.githistory",
+		"njpwerner.autodocstring"
+	],
+	// mount other folders
+	// "mounts": [
+	// 	"source=${localEnv:HOME}/data,target=/workspaces/data,type=bind,consistency=cached"
+	// ],
+	"containerEnv": {
+		"AWS_ACCESS_KEY_ID": "${localEnv:AWS_ACCESS_KEY_ID}",
+		"AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}"
+	},
+	// This was added!
+	"runArgs": [
+		"--gpus=all"
+	]
+}
