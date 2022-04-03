@@ -44,7 +44,7 @@ RUN /opt/conda/bin/conda config --append channels conda-forge && /opt/conda/bin/
 RUN conda install jupyterlab && conda clean --all --yes
 
 
-WORKDIR /code
+WORKDIR /notebooks
 
 #COPY requirements.txt .
 #RUN pip install -r requirements.txt

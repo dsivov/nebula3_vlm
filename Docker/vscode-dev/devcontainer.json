@@ -2,6 +2,8 @@
 	"name": "Nebula Dev",
 	"context": ".",
 	"dockerFile": "./Dockerfile",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/notebooks,type=bind",
+	"workspaceFolder": "/notebooks",
 	// "image": "aharonamir/dev-python-nebula2:conda-0.3",
 	"settings": {
 		"python.defaultInterpreterPath": "/opt/conda/bin/python",
