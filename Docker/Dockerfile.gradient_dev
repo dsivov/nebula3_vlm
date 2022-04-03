@@ -5,7 +5,7 @@ LABEL com.nvidia.volumes.needed="nvidia_driver"
 COPY environment.yaml /environment.yaml
 ENV PYTHON_VERSION=3.9
 ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
-ENV PATH=$PATH:/opt/conda/bin/
+ENV PATH=$PATH:/notebooks/conda/bin/
 ENV USER nebula
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -25,16 +25,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/* && \
     curl -o ~/miniconda.sh -O  https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
     chmod +x ~/miniconda.sh && \
-    ~/miniconda.sh -b -p /opt/conda && \
+    ~/miniconda.sh -b -p /notebooks/conda && \
     rm ~/miniconda.sh && \
-    /opt/conda/bin/conda install conda-build && \
-    conda env create -f environment.yaml && \
-    conda clean --all -y && \
-    rm -rf /root/.cache
+    /notebooks/conda/bin/conda install conda-build && \
+    curl -fsSL https://code-server.dev/install.sh | sh
+
 # Create Environment
-ENV PATH /opt/conda/bin:$PATH
-ENV PATH /opt/conda/envs/nebula_vlm/bin:$PATH
-COPY run.sh /run.sh
+ENV PATH /notebooks/conda/conda/bin:$PATH
+ENV PATH /notebooks/conda/envs/nebula_vlm/bin:$PATH
+COPY  dev_run.sh /run.sh
 RUN mkdir -p /opt/models
 
 # Set some environment variables. PYTHONUNBUFFERED keeps Python from buffering
@@ -47,9 +46,10 @@ ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
 
 # Set up the program in the image
-COPY src /opt/program
-COPY nebula3_database /opt/program
+COPY app /opt/program
+COPY nebula3_database /opt/program/nebula3_database
 COPY vlm /opt/program
 RUN chmod +x /opt/program/serve
 WORKDIR /notebooks
-CMD ["/run.sh"]
+EXPOSE 8888
+ENTRYPOINT ["/run.sh"]
